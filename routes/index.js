@@ -1,15 +1,11 @@
 require('./connectDB')
 
 module.exports = function (app) {
-  /**
-   * baseAPI公共路径
-   */
+  // baseAPI
   require('./base')(app)
-  //
-  // /**
-  //  *使用数据库路由
-  //  */
-  // require('./data')(app);
+
+  // 用户模块
+  require('./user')(app)
   //
   // /**
   //  *个人私人路由

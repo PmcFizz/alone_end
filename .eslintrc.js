@@ -26,6 +26,7 @@ module.exports = {
     'generator-star-spacing': 'off',
     // allow paren-less arrow functions
     'arrow-parens': 0,
-    'eol-last': 0
+    'eol-last': 0,
+    'new-cap': 0
   }
 }
