@@ -1,0 +1,8 @@
+{
+  "createTime": "2018年4月8日15:53:54",
+  "author": "Fizz",
+  "Email": "mengchen_0212@foxmail.com",
+  "des": "提供api的后台接口系统",
+  "git": "https://github.com/PmcFizz/alone_end.git",
+  "technology": "nodejs,express,mongodb,es6,npm"
+}

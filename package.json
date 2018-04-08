@@ -1,0 +1,28 @@
+{
+  "name": "alone_end",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./alone_end.js",
+    "lint": "eslint --ext .js src routes --fix"
+  },
+  "dependencies": {
+    "babel-eslint": "^7.1.1",
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-formatter-pretty": "^1.3.0",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.2.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "express": "~4.15.5",
+    "mongoose": "^5.0.13",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5"
+  }
+}
