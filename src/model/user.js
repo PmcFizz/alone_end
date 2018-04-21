@@ -1,5 +1,6 @@
 /**
  * Created by Fizz 2018年4月8日16:42:42
+ * 用户数据模型
  */
 let mongoose = require('mongoose')
 let Schema = mongoose.Schema
@@ -35,4 +36,4 @@ filter.add('name', 'trim')
 filter.add('password', 'trim')
 
 MongooseValidateFilter.validateFilter(userSchema, validate, filter)
-mongoose.model('user', userSchema)
+mongoose.model('User', userSchema)

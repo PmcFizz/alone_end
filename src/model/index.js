@@ -1,3 +1,7 @@
 var mongoose = require('mongoose')
 require('./user')
-exports.user = mongoose.model('user')
+exports.User = mongoose.model('user')
+require('./question')
+exports.Question = mongoose.model('question')
+require('./answer')
+exports.Answer = mongoose.model('answer')
