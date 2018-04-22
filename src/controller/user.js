@@ -1,5 +1,5 @@
 var router = require('express').Router()
-let user = require(MODELS).user
+let user = require(PROXY).user
 
 // 注册用户
 router.post('/register', function (req, res) {
