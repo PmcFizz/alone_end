@@ -2,7 +2,7 @@ var router = require('express').Router()
 let user = require(PROXY).user
 
 // 注册用户
-router.post('/register', function (req, res) {
+router.post('/createOne', function (req, res) {
   let params = req.body
   user.addOneUser(params, (err, data) => {
     if (err) {
@@ -36,12 +36,12 @@ router.post('/bindPhone', function (req, res) {
 })
 
 // 获取个人信息
-router.post('/getUserInfo', function (req, res) {
+router.post('/getUserInfoById', function (req, res) {
   RETURNSUCCESS(res, {name: 1})
 })
 
 // 查询用户
-router.post('/queryUser', function (req, res) {
+router.post('/commonQueryUser', function (req, res) {
   RETURNSUCCESS(res, {name: 1})
 })
 

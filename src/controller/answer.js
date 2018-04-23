@@ -10,7 +10,7 @@ let reqBody
 /**
  * add one answer api
  */
-router.post('/add-post', (req, res) => {
+router.post('/createOne', (req, res) => {
   reqBody = req.body
   answer.addOneAnswer(reqBody, (error, returnData) => {
     return RETURNSUCCESS(error, returnData, res)
@@ -65,7 +65,7 @@ router.post('/queryByDataTable', (req, res) => {
 /**
  * del one data
  */
-router.post('/del-post', (req, res) => {
+router.post('/delOne', (req, res) => {
   reqBody = req.body
   let id = reqBody._id ? reqBody._id : reqBody.id
   answer.delOneAnswer({_id: id}, (error, resData) => {
@@ -87,7 +87,7 @@ router.post('/queryById', (req, res) => {
 /**
  * query answer data
  */
-router.post('/query', (req, res) => {
+router.post('/commonQuery', (req, res) => {
   reqBody = req.body
   let option = {}
   answer.queryAnswers(reqBody, option, (error, returnData) => {
@@ -98,7 +98,7 @@ router.post('/query', (req, res) => {
 /**
  * update one answer data
  */
-router.post('/update-post', (req, res) => {
+router.post('/updateOne', (req, res) => {
   reqBody = req.body
   let id = reqBody._id ? reqBody._id : reqBody.id
   delete reqBody._id
