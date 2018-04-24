@@ -1,24 +1,28 @@
 /**
- * Created by Fizz on 2018/4/21.
+ * Created by Fizz on 2017/8/10.
  */
 
 let router = require('express').Router()
-let question = require(PROXY).question
+let company = require(PROXY).company
 let async = require('async')
 let reqBody
 
 /**
- * add one question api
+ * add one company api
  */
 router.post('/createOne', (req, res) => {
   reqBody = req.body
-  question.addOneQuestion(reqBody, (error, returnData) => {
-    return RETURNSUCCESS(error, returnData, res)
+  company.addOneCompany(reqBody, (error, resData) => {
+    if (error) {
+      return RETURNFAIL(res, error)
+    } else {
+      return RETURNSUCCESS(res, resData)
+    }
   })
 })
 
 /**
- * use dateTable query question data
+ *  query company data by page
  */
 router.post('/queryByPage', (req, res) => {
   reqBody = req.body
@@ -32,7 +36,7 @@ router.post('/queryByPage', (req, res) => {
 
   async.parallel([
     (cb) => {
-      question.countQuestion(query, (error, returnData) => {
+      company.countCompany(query, (error, returnData) => {
         if (error) {
           cb(error)
         } else {
@@ -41,7 +45,7 @@ router.post('/queryByPage', (req, res) => {
       })
     },
     (cb) => {
-      question.queryQuestionByPage(query, opt, (error, returnData) => {
+      company.queryCompanyByPage(query, opt, (error, returnData) => {
         if (error) {
           cb(error)
         } else {
@@ -49,10 +53,8 @@ router.post('/queryByPage', (req, res) => {
         }
       })
     }
+
   ], (err, result) => {
-    if (err) {
-      return RETURNFAIL(res, err)
-    }
     let dataTableModel = {
       recordsFiltered: result[0],
       recordsTotal: result[0],
@@ -68,43 +70,59 @@ router.post('/queryByPage', (req, res) => {
 router.post('/delOne', (req, res) => {
   reqBody = req.body
   let id = reqBody._id ? reqBody._id : reqBody.id
-  question.delOneQuestion({_id: id}, (error, resData) => {
-    return RETURNSUCCESS(error, resData, res)
+  company.delOneCompany({_id: id}, (error, resData) => {
+    if (error) {
+      return RETURNFAIL(res, error)
+    } else {
+      return RETURNSUCCESS(res, resData)
+    }
   })
 })
 
 /**
- * query only one  question data
+ * query only one company data
  */
 router.post('/queryById', (req, res) => {
   reqBody = req.body
   let id = reqBody._id ? reqBody._id : reqBody.id
-  question.findOneQuestion(id, (error, returnData) => {
-    return RETURNSUCCESS(error, returnData, res)
+  company.findOneCompany(id, (error, resData) => {
+    if (error) {
+      return RETURNFAIL(res, error)
+    } else {
+      return RETURNSUCCESS(res, resData)
+    }
   })
 })
 
 /**
- * query question data
+ * query company data
  */
 router.post('/commonQuery', (req, res) => {
   reqBody = req.body
   let option = {}
-  question.queryQuestions(reqBody, option, (error, returnData) => {
-    return RETURNSUCCESS(error, returnData, res)
+  company.queryCompanys(reqBody, option, (error, resData) => {
+    if (error) {
+      return RETURNFAIL(res, error)
+    } else {
+      return RETURNSUCCESS(res, resData)
+    }
   })
 })
 
 /**
- * update one question data
+ * update one company data
  */
 router.post('/updateOne', (req, res) => {
   reqBody = req.body
   let id = reqBody._id ? reqBody._id : reqBody.id
   delete reqBody._id
   delete reqBody.id
-  question.updateOneQuestion({_id: id}, {$set: reqBody}, (error, returnData) => {
-    return RETURNSUCCESS(error, returnData, res)
+  company.updateOneCompany({_id: id}, {$set: reqBody}, (error, resData) => {
+    if (error) {
+      return RETURNFAIL(res, error)
+    } else {
+      return RETURNSUCCESS(res, resData)
+    }
   })
 })
 

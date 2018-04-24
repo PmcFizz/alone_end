@@ -8,7 +8,7 @@ let mongoose = require('mongoose'),
   validate = new MongooseValidateFilter.validate(),
   filter = new MongooseValidateFilter.filter()
 
-const waitreplaceSchema = new schema({
+const companySchema = new schema({
   name: String, // name
   createUserId: {type: schema.Types.ObjectId, ref: 'user'}, // create User ID
   createDate: {type: Date, default: Date.now()}, // create time
@@ -22,5 +22,5 @@ validate.add('name', {
 })
 
 filter.add('name', 'trim')
-MongooseValidateFilter.validateFilter(waitreplaceSchema, validate, filter)
-mongoose.model('Waitreplace', waitreplaceSchema)
+MongooseValidateFilter.validateFilter(companySchema, validate, filter)
+mongoose.model('Company', companySchema)

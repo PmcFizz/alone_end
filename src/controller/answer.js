@@ -20,7 +20,7 @@ router.post('/createOne', (req, res) => {
 /**
  * use dateTable query answer data
  */
-router.post('/queryByDataTable', (req, res) => {
+router.post('/queryByPage', (req, res) => {
   reqBody = req.body
   let query = {}
   let opt = {}
