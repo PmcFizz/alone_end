@@ -2,11 +2,11 @@
  * Created by FizzPang on 2017/8/10.
  */
 
-let mongoose = require('mongoose'),
-  schema = mongoose.Schema,
-  MongooseValidateFilter = require('mongoose-validatefilter'),
-  validate = new MongooseValidateFilter.validate(),
-  filter = new MongooseValidateFilter.filter()
+let mongoose = require('mongoose')
+let schema = mongoose.Schema
+let MongooseValidateFilter = require('mongoose-validatefilter')
+let validate = new MongooseValidateFilter.validate()
+let filter = new MongooseValidateFilter.filter()
 
 const waitreplaceSchema = new schema({
   name: String, // name
