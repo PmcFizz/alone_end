@@ -110,7 +110,7 @@ function onListening () {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port
-  console.log(`^_^服务已启动${bind}^_^`)
+  console.log(`^_^API服务已启动http://localhost:${addr.port}^_^`)
   debug('Listening on ' + bind)
 }
 

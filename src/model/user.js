@@ -13,8 +13,8 @@ let userSchema = new Schema({
   age: Number, // 年龄
   password: String, // 密码
   email: String, // 邮箱
-  phone: Number, // 手机号码
-  birthday: {type: Date, default: Date.now()}, // 生日
+  phoneNo: Number, // 手机号码
+  birthday: {type: Date}, // 生日
   createDate: {type: Date, default: Date.now()}, // 创建时间
   status: {type: Number, default: 1}, // 状态 0:未激活;1:正常使用中;2:锁定
   lastModifyDate: {type: Date, default: Date.now()} // 最后修改时间

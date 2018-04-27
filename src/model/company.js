@@ -16,9 +16,10 @@ const companySchema = new schema({
   lastModifiedDate: {type: Date, default: Date.now()} // the last modift time
 })
 
-validate.add('name', {
-  require: true,
-  msg: 'name is must defind'
+// 表字段验证规则
+validate.add('content', {
+  required: true,
+  msg: '缺少回答内容'
 })
 
 filter.add('name', 'trim')

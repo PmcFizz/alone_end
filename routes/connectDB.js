@@ -1,7 +1,7 @@
 // 链接数据库
 let mongoose = require('mongoose')
 
-var promise = mongoose.connect('mongodb://115.159.52.223/alone', {
+var promise = mongoose.connect('mongodb://localhost/alone', {
   socketTimeoutMS: 0,
   keepAlive: true,
   reconnectTries: 30

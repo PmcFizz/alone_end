@@ -17,7 +17,7 @@ const waitreplaceSchema = new schema({
 })
 
 validate.add('name', {
-  require: true,
+  required: true,
   msg: 'name is must defind'
 })
 
