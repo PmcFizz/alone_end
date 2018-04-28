@@ -16,11 +16,19 @@ router.post('/createOne', function (req, res) {
 // 登录
 router.post('/login', function (req, res) {
   let params = req.body
-  user.queryUsers(params, {}, (err, data) => {
+  user.queryUsers({phone: params.phone}, {}, (err, data) => {
     if (err) {
       return RETURNFAIL(res, err)
     } else {
-      return RETURNSUCCESS(res, data)
+      if (data.length === 0) {
+        return RETURNSUCCESS(res, {msg: '没有查到该用户'})
+      } else {
+        if (params.password === data[0].password) {
+          return RETURNSUCCESS(res, {msg: '登录成功'})
+        } else {
+          return RETURNSUCCESS(res, {msg: '密码错误'})
+        }
+      }
     }
   })
 })
