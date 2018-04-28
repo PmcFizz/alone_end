@@ -25,6 +25,18 @@ router.post('/login', function (req, res) {
   })
 })
 
+// 查询用户
+router.post('/query', function (req, res) {
+  let params = req.body
+  user.queryUsers(params, {}, (err, data) => {
+    if (err) {
+      return RETURNFAIL(res, err)
+    } else {
+      return RETURNSUCCESS(res, data)
+    }
+  })
+})
+
 // 验证邮箱
 router.post('/validateEmail', function (req, res) {
   RETURNSUCCESS(res, {name: 1})
