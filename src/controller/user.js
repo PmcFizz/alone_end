@@ -1,14 +1,33 @@
 var router = require('express').Router()
 let user = require(PROXY).user
+let {isPhoneNumber, isEmail, isValidUserpwd} = require('../tools/validate')
 
 // 注册用户
 router.post('/createOne', function (req, res) {
   let params = req.body
-  user.addOneUser(params, (err, data) => {
-    if (err) {
-      return RETURNFAIL(res, err)
+  let phoneNo = params.phoneNo
+  let email = params.email
+  let password = params.password
+  if (!isPhoneNumber(phoneNo)) {
+    return RETURNFAIL(res, {msg: '手机号必须是13位数字'})
+  }
+  if (email && !isEmail(email)) {
+    return RETURNFAIL(res, {msg: '邮箱格式不正确'})
+  }
+  if (!isValidUserpwd(password)) {
+    return RETURNFAIL(res, {msg: '密码以字母开头，长度在6~18之间，只能包含字母、数字和下划线'})
+  }
+  user.queryUsers({phoneNo: params.phoneNo}, {}, (err, data) => {
+    if (data.length !== 0) {
+      return RETURNFAIL(res, {msg: '该手机号已注册'})
     } else {
-      return RETURNSUCCESS(res, data)
+      user.addOneUser(params, (err, data) => {
+        if (err) {
+          return RETURNFAIL(res, err)
+        } else {
+          return RETURNSUCCESS(res, data)
+        }
+      })
     }
   })
 })
@@ -16,7 +35,11 @@ router.post('/createOne', function (req, res) {
 // 登录
 router.post('/login', function (req, res) {
   let params = req.body
-  user.queryUsers({phone: params.phone}, {}, (err, data) => {
+  let phoneNo = params.phoneNo
+  if (!isPhoneNumber(phoneNo)) {
+    return RETURNFAIL(res, {msg: '手机号必须是13位数字'})
+  }
+  user.queryUsers({phoneNo: params.phoneNo}, {}, (err, data) => {
     if (err) {
       return RETURNFAIL(res, err)
     } else {
@@ -36,7 +59,7 @@ router.post('/login', function (req, res) {
 // 查询用户
 router.post('/query', function (req, res) {
   let params = req.body
-  user.queryUsers(params, {}, (err, data) => {
+  user.queryUsers(params, {password: 0}, (err, data) => {
     if (err) {
       return RETURNFAIL(res, err)
     } else {

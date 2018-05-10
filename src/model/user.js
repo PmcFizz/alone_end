@@ -27,6 +27,12 @@ validate.add('name', {
 })
 
 // 表字段验证规则
+validate.add('phoneNo', {
+  required: true,
+  msg: '缺少手机号'
+})
+
+// 表字段验证规则
 validate.add('password', {
   required: true,
   msg: '缺少密码'

@@ -18,7 +18,7 @@ exports.queryUsers = (query, opt, cb) => {
 // 分页查询用户
 exports.queryUserByPage = function (query, opt, cb) {
   User
-    .find(query)
+    .find(query, {password: 0})
     .skip(parseInt(opt.skip, 10))
     .limit(parseInt(opt.limit, 10))
     .exec(cb)

@@ -6,6 +6,8 @@ global.CONTROLLERS = global.BASEDIR + '/src/controller'
 global.MODELS = global.BASEDIR + '/src/model'
 global.PROXY = global.BASEDIR + '/src/proxy'
 
+// TODO 制定返回的数据格式
+
 //  global return success
 global.RETURNSUCCESS = function (res, data) {
   return res.json({'code': 200, 'data': data, msg: '请求成功'})

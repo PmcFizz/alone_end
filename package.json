@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "autostart": "supervisor ./alone_end.js",
     "start": "node ./alone_end.js",
     "lint": "eslint --ext .js src routes --fix"
   },
@@ -29,6 +30,7 @@
     "mongoose": "^5.0.13",
     "mongoose-validatefilter": "0.0.18",
     "morgan": "~1.9.0",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "supervisor": "^0.12.0"
   }
 }
