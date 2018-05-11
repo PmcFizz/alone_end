@@ -1,6 +1,8 @@
 var router = require('express').Router()
 let user = require(PROXY).user
 let {isPhoneNumber, isEmail, isValidUserpwd} = require('../tools/validate')
+let sendMail = require('../tools/mail')
+let registerMailContent = require('../config/mailConfig').registerMailContent
 
 // 注册用户
 router.post('/createOne', function (req, res) {
@@ -16,6 +18,9 @@ router.post('/createOne', function (req, res) {
   }
   if (!isValidUserpwd(password)) {
     return RETURNFAIL(res, {msg: '密码以字母开头，长度在6~18之间，只能包含字母、数字和下划线'})
+  }
+  if (email) {
+    sendMail(email, '师匠,为自由而生', registerMailContent)
   }
   user.queryUsers({phoneNo: params.phoneNo}, {}, (err, data) => {
     if (data.length !== 0) {
@@ -66,6 +71,11 @@ router.post('/query', function (req, res) {
       return RETURNSUCCESS(res, data)
     }
   })
+})
+
+router.get('/sendmail', function (req, res) {
+  sendMail('1046048974@qq.com', '师匠,为自由而生', registerMailContent)
+  return res.json({code: 200, msg: '通信成功'})
 })
 
 // 验证邮箱
