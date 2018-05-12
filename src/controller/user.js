@@ -30,7 +30,7 @@ router.post('/createOne', function (req, res) {
         if (err) {
           return RETURNFAIL(res, err)
         } else {
-          return RETURNSUCCESS(res, data)
+          return RETURNSUCCESS(res, {msg: '注册成功'})
         }
       })
     }

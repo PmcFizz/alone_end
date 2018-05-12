@@ -6,4 +6,5 @@ module.exports = function (app) {
   app.use('/user', require(CONTROLLERS + '/user'))
   app.use('/question', require(CONTROLLERS + '/question'))
   app.use('/answer', require(CONTROLLERS + '/answer'))
+  app.use('/company', require(CONTROLLERS + '/company'))
 }

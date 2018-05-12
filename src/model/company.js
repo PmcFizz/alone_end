@@ -17,9 +17,9 @@ const companySchema = new schema({
 })
 
 // 表字段验证规则
-validate.add('content', {
+validate.add('name', {
   required: true,
-  msg: '缺少回答内容'
+  msg: '缺少公司名'
 })
 
 filter.add('name', 'trim')
