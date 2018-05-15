@@ -35,7 +35,7 @@
  'Zoho'
  * @type {{email: {service: string, user: string, pass: string}}}
  */
-module.exports = {
+const mailConfig = {
   email: {
     service: 'QQ',
     user: '2272862992@qq.com',
@@ -72,3 +72,5 @@ module.exports = {
     <br/>
 </p>`
 }
+
+module.exports = mailConfig
