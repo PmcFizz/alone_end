@@ -72,5 +72,4 @@ const mailConfig = {
     <br/>
 </p>`
 }
-
 module.exports = mailConfig
