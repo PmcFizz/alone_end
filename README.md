@@ -15,3 +15,5 @@ api
 4：邮箱可以稍后验证
 5：可以上传个人工作经历 经历的一些公司 然后邀请其评价公司
 6：评价公司的表单设计 100分制 福利，薪酬，公司氛围，
+
+公司数据链接 https://github.com/maguowei/Internet-companies-of-China

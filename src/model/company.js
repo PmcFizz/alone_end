@@ -9,11 +9,20 @@ let validate = new MongooseValidateFilter.validate()
 let filter = new MongooseValidateFilter.filter()
 
 const companySchema = new schema({
-  name: String, // name
-  createUserId: {type: schema.Types.ObjectId, ref: 'user'}, // create User ID
-  createDate: {type: Date, default: Date.now()}, // create time
-  status: {type: Number, default: 1}, // status
-  lastModifiedDate: {type: Date, default: Date.now()} // the last modift time
+  name: String, // 公司名
+  shortName: '', // 公司短名
+  companyLink: '', // 公司官网
+  logo: '', // 公司logo
+  createUserId: {type: schema.Types.ObjectId, ref: 'user'}, // 创建人
+  createDate: {type: Date, default: Date.now()}, // 创建时间
+  status: {type: Number, default: 1}, // 状态
+  basic: {type: Object}, // 融资阶段,人数,类型,地址
+  type: String, // 公司类型
+  companyAddress: String, // 公司地址
+  tags: {type: Array}, // 标签
+  companyIntroText: String, // 公司介绍
+  isImport: {type: Boolean, default: false}, // 是否是导入的
+  lastModifiedDate: {type: Date, default: Date.now()} // 最后更新时间
 })
 
 // 表字段验证规则

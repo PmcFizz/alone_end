@@ -39,7 +39,7 @@ module.exports = {
   email: {
     service: 'QQ',
     user: '2272862992@qq.com',
-    pass: 'seakxdnpkoafebjf'
+    pass: 'seakxdnpkoafebjf' // 你以为我会在这里写邮箱密码吗
   },
   registerMailContent: `<h1 style="font-size: 32px; font-weight: bold; border-bottom: 2px solid rgb(204, 204, 204); padding: 0px 4px 0px 0px; text-align: center; margin: 0px 0px 20px;">
     <span style="font-size:19px;font-family:宋体">师匠<br/></span>
