@@ -30,8 +30,8 @@ router.post('/queryByPage', (req, res) => {
   if (reqBody.name) {
     query.name = reqBody.name
   }
-  opt.limit = reqBody.length
-  opt.skip = reqBody.start
+  opt.limit = reqBody.pageSize || 10
+  opt.skip = reqBody.pageIndex * 10 || 1
 
   async.parallel([
     (cb) => {
@@ -122,6 +122,25 @@ router.post('/batchCreate', (req, res) => {
 router.post('/commonQuery', (req, res) => {
   let reqBody = req.body
   let option = {}
+  company.queryCompanys(reqBody, option, (error, resData) => {
+    if (error) {
+      return RETURNFAIL(res, error)
+    } else {
+      return RETURNSUCCESS(res, resData)
+    }
+  })
+})
+
+/**
+ * 根据关键字查询公司名
+ */
+router.post('/queryCompanyByKeyWord', (req, res) => {
+  let reqBody = req.body
+  let option = {}
+  // TODO 根据name进行模糊匹配name和shotName字段
+  option.limit = reqBody.pageSize || 10
+  option.skip = reqBody.pageIndex * 10 || 1
+
   company.queryCompanys(reqBody, option, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
