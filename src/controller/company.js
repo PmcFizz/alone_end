@@ -28,10 +28,11 @@ router.post('/queryByPage', (req, res) => {
   let query = {}
   let opt = {}
   if (reqBody.name) {
-    query.name = reqBody.name
+    query.name = {$regex: new RegExp(reqBody.name.trim())}
+    // query.name = `/${reqBody.name}/`
   }
   opt.limit = reqBody.pageSize || 10
-  opt.skip = reqBody.pageIndex * 10 || 1
+  opt.skip = reqBody.pageIndex * 10 || 0
 
   async.parallel([
     (cb) => {

@@ -40,10 +40,12 @@ exports.queryCompanys = (query, opt, cb) => {
  * @param cb : after search exec callback
  */
 exports.queryCompanyByPage = (query, opt, cb) => {
+  console.log(query)
+  console.log(opt)
   opt.limit = opt.limit ? opt.limit : 10
   Company
     .find(query)
-    .skip(parseInt(opt.skip, 10))
+    .skip(parseInt(opt.skip, 0))
     .limit(parseInt(opt.limit, 10))
     .exec(cb)
 }
