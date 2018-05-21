@@ -12,7 +12,7 @@ exports.isValidUsername = (str) => {
  * @param str
  */
 exports.isValidUserpwd = (str) => {
-  const reg = /^[a-zA-Z]\w{5,17}$/
+  const reg = /^[a-zA-Z0-9_]\w{5,17}$/
   return reg.test(str)
 }
 
