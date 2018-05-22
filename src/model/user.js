@@ -9,11 +9,18 @@ let validate = new MongooseValidateFilter.validate()
 let filter = new MongooseValidateFilter.filter()
 
 let userSchema = new Schema({
-  name: String, // 名字
+  nickName: String, // 昵称
+  realName: String, // 真实名字
+  headPicture: String, // 头像
+  sex: Number, // 性别1:男;2:女
   age: Number, // 年龄
   password: String, // 密码
   email: String, // 邮箱
   phoneNo: Number, // 手机号码
+  domicilePovice: String, // 居住省份
+  domicileCity: String, // 居住城市
+  domicileDetailAddress: String, // 居住详细地址
+  liveAddress: String, // 居住地址
   birthday: {type: Date}, // 生日
   createDate: {type: Date, default: Date.now()}, // 创建时间
   status: {type: Number, default: 1}, // 状态 0:未激活;1:正常使用中;2:锁定
@@ -21,9 +28,9 @@ let userSchema = new Schema({
 })
 
 // 表字段验证规则
-validate.add('name', {
+validate.add('nickName', {
   required: true,
-  msg: '缺少用户名'
+  msg: '缺少昵称'
 })
 
 // 表字段验证规则
