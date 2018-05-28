@@ -5,13 +5,12 @@
 let router = require('express').Router()
 let occupationalHistory = require(PROXY).occupationalHistory
 let async = require('async')
-let reqBody
 
 /**
  * add one occupationalHistory api
  */
 router.post('/createOne', (req, res) => {
-  reqBody = req.body
+  let reqBody = req.body
   occupationalHistory.addOneOccupationalHistory(reqBody, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
@@ -25,7 +24,7 @@ router.post('/createOne', (req, res) => {
  *  query occupationalHistory data by page
  */
 router.post('/queryByPage', (req, res) => {
-  reqBody = req.body
+  let reqBody = req.body
   let query = {}
   let opt = {}
   if (reqBody.name) {
@@ -68,7 +67,7 @@ router.post('/queryByPage', (req, res) => {
  * del one data
  */
 router.post('/delOne', (req, res) => {
-  reqBody = req.body
+  let reqBody = req.body
   let id = reqBody._id ? reqBody._id : reqBody.id
   occupationalHistory.delOneOccupationalHistory({_id: id}, (error, resData) => {
     if (error) {
@@ -83,7 +82,7 @@ router.post('/delOne', (req, res) => {
  * query only one occupationalHistory data
  */
 router.post('/queryById', (req, res) => {
-  reqBody = req.body
+  let reqBody = req.body
   let id = reqBody._id ? reqBody._id : reqBody.id
   occupationalHistory.findOneOccupationalHistory(id, (error, resData) => {
     if (error) {
@@ -98,7 +97,7 @@ router.post('/queryById', (req, res) => {
  * query occupationalHistory data
  */
 router.post('/commonQuery', (req, res) => {
-  reqBody = req.body
+  let reqBody = req.body
   let option = {}
   occupationalHistory.queryOccupationalHistorys(reqBody, option, (error, resData) => {
     if (error) {
@@ -113,7 +112,7 @@ router.post('/commonQuery', (req, res) => {
  * update one occupationalHistory data
  */
 router.post('/updateOne', (req, res) => {
-  reqBody = req.body
+  let reqBody = req.body
   let id = reqBody._id ? reqBody._id : reqBody.id
   delete reqBody._id
   delete reqBody.id

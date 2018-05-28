@@ -22,11 +22,10 @@ const occupationalHistorySchema = new schema({
   lastModifiedDate: {type: Date, default: Date.now()} // the last modift time
 })
 
-validate.add('name', {
+validate.add('companyName', {
   required: true,
-  msg: 'name is must defind'
+  msg: 'companyName is must defind'
 })
 
-filter.add('name', 'trim')
 MongooseValidateFilter.validateFilter(occupationalHistorySchema, validate, filter)
 mongoose.model('OccupationalHistory', occupationalHistorySchema)

@@ -1,17 +1,18 @@
 /**
  * Created by Fizz on 2017/8/10.
+ * 评价接口
  */
 
 let router = require('express').Router()
-let waitreplace = require(PROXY).waitreplace
+let evaluate = require(PROXY).evaluate
 let async = require('async')
 
 /**
- * add one waitreplace api
+ * add one evaluate api
  */
 router.post('/createOne', (req, res) => {
   let reqBody = req.body
-  waitreplace.addOneWaitreplace(reqBody, (error, resData) => {
+  evaluate.addOneEvaluate(reqBody, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
     } else {
@@ -21,7 +22,7 @@ router.post('/createOne', (req, res) => {
 })
 
 /**
- *  query waitreplace data by page
+ *  query evaluate data by page
  */
 router.post('/queryByPage', (req, res) => {
   let reqBody = req.body
@@ -35,7 +36,7 @@ router.post('/queryByPage', (req, res) => {
 
   async.parallel([
     (cb) => {
-      waitreplace.countWaitreplace(query, (error, returnData) => {
+      evaluate.countEvaluate(query, (error, returnData) => {
         if (error) {
           cb(error)
         } else {
@@ -44,7 +45,7 @@ router.post('/queryByPage', (req, res) => {
       })
     },
     (cb) => {
-      waitreplace.queryWaitreplaceByPage(query, opt, (error, returnData) => {
+      evaluate.queryEvaluateByPage(query, opt, (error, returnData) => {
         if (error) {
           cb(error)
         } else {
@@ -69,7 +70,7 @@ router.post('/queryByPage', (req, res) => {
 router.post('/delOne', (req, res) => {
   let reqBody = req.body
   let id = reqBody._id ? reqBody._id : reqBody.id
-  waitreplace.delOneWaitreplace({_id: id}, (error, resData) => {
+  evaluate.delOneEvaluate({_id: id}, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
     } else {
@@ -79,12 +80,12 @@ router.post('/delOne', (req, res) => {
 })
 
 /**
- * query only one waitreplace data
+ * query only one evaluate data
  */
 router.post('/queryById', (req, res) => {
   let reqBody = req.body
   let id = reqBody._id ? reqBody._id : reqBody.id
-  waitreplace.findOneWaitreplace(id, (error, resData) => {
+  evaluate.findOneEvaluate(id, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
     } else {
@@ -94,12 +95,12 @@ router.post('/queryById', (req, res) => {
 })
 
 /**
- * query waitreplace data
+ * query evaluate data
  */
 router.post('/commonQuery', (req, res) => {
   let reqBody = req.body
   let option = {}
-  waitreplace.queryWaitreplaces(reqBody, option, (error, resData) => {
+  evaluate.queryEvaluates(reqBody, option, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
     } else {
@@ -109,14 +110,14 @@ router.post('/commonQuery', (req, res) => {
 })
 
 /**
- * update one waitreplace data
+ * update one evaluate data
  */
 router.post('/updateOne', (req, res) => {
   let reqBody = req.body
   let id = reqBody._id ? reqBody._id : reqBody.id
   delete reqBody._id
   delete reqBody.id
-  waitreplace.updateOneWaitreplace({_id: id}, {$set: reqBody}, (error, resData) => {
+  evaluate.updateOneEvaluate({_id: id}, {$set: reqBody}, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
     } else {
