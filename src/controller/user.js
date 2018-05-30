@@ -52,6 +52,7 @@ router.post('/login', function (req, res) {
         return RETURNSUCCESS(res, {msg: '没有查到该用户'})
       } else {
         if (params.password === data[0].password) {
+          req.session.userId = data[0]._id
           return RETURNSUCCESS(res, {msg: '登录成功'})
         } else {
           return RETURNSUCCESS(res, {msg: '密码错误'})
@@ -59,6 +60,12 @@ router.post('/login', function (req, res) {
       }
     }
   })
+})
+
+// 登出
+router.post('/logout', function (req, res) {
+  req.session.userId = null
+  return RETURNSUCCESS(res, {msg: '登录成功'})
 })
 
 // 查询用户
@@ -76,6 +83,21 @@ router.post('/query', function (req, res) {
 router.get('/sendmail', function (req, res) {
   sendMail('1046048974@qq.com', '师匠,为自由而生', registerMailContent)
   return res.json({code: 200, msg: '通信成功'})
+})
+
+// 测试session登录
+router.get('/test-session-login', function (req, res) {
+  req.session.userId = '123'
+  return res.json({code: 200, msg: '通信成功'})
+})
+
+// 测试session拦截
+router.get('/test-session-lanjie', function (req, res) {
+  if (req.session.userId) {
+    return res.json({code: 200, msg: '存在userId'})
+  } else {
+    return res.json({code: 200, msg: '没有userId'})
+  }
 })
 
 // 验证邮箱
@@ -96,6 +118,20 @@ router.post('/getUserInfoById', function (req, res) {
 // 查询用户
 router.post('/commonQueryUser', function (req, res) {
   RETURNSUCCESS(res, {name: 1})
+})
+
+// 查询当前登录人的信息
+router.post('/queryMyInfo', (req, res) => {
+  let params = req.body
+  let userId = req.session.userId
+  params._id = userId
+  user.queryUsers(params, {password: 0}, (err, data) => {
+    if (err) {
+      return RETURNFAIL(res, err)
+    } else {
+      return RETURNSUCCESS(res, data)
+    }
+  })
 })
 
 module.exports = router

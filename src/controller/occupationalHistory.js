@@ -11,6 +11,8 @@ let async = require('async')
  */
 router.post('/createOne', (req, res) => {
   let reqBody = req.body
+  let userId = req.session.userId
+  reqBody.createUserId = userId
   occupationalHistory.addOneOccupationalHistory(reqBody, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
@@ -117,6 +119,23 @@ router.post('/updateOne', (req, res) => {
   delete reqBody._id
   delete reqBody.id
   occupationalHistory.updateOneOccupationalHistory({_id: id}, {$set: reqBody}, (error, resData) => {
+    if (error) {
+      return RETURNFAIL(res, error)
+    } else {
+      return RETURNSUCCESS(res, resData)
+    }
+  })
+})
+
+/**
+ * 查询当前登录人的任职经历
+ */
+router.post('/queryMyOccup', (req, res) => {
+  let reqBody = req.body
+  let option = {}
+  let userId = req.session.userId
+  reqBody.createUserId = userId
+  occupationalHistory.queryOccupationalHistorys(reqBody, option, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
     } else {

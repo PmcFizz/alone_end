@@ -12,6 +12,8 @@ let async = require('async')
  */
 router.post('/createOne', (req, res) => {
   let reqBody = req.body
+  let userId = req.session.userId
+  reqBody.createUserId = userId
   evaluate.addOneEvaluate(reqBody, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
@@ -118,6 +120,23 @@ router.post('/updateOne', (req, res) => {
   delete reqBody._id
   delete reqBody.id
   evaluate.updateOneEvaluate({_id: id}, {$set: reqBody}, (error, resData) => {
+    if (error) {
+      return RETURNFAIL(res, error)
+    } else {
+      return RETURNSUCCESS(res, resData)
+    }
+  })
+})
+
+/**
+ * 查询当前登录人写的评价
+ */
+router.post('/queryMyEvaluate', (req, res) => {
+  let reqBody = req.body
+  let userId = req.session.userId
+  reqBody.createUserId = userId
+  let option = {}
+  evaluate.queryEvaluates(reqBody, option, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
     } else {

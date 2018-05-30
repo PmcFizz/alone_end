@@ -1,7 +1,8 @@
 // 链接数据库
 let mongoose = require('mongoose')
+let dbConfig = require('../src/config/dbConfig')
 
-var promise = mongoose.connect('mongodb://localhost/alone', {
+var promise = mongoose.connect(dbConfig.dburl, {
   socketTimeoutMS: 0,
   keepAlive: true,
   reconnectTries: 30
