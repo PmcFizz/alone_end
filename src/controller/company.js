@@ -61,10 +61,53 @@ router.post('/queryByPage', (req, res) => {
     let dataTableModel = {
       recordsFiltered: result[0],
       recordsTotal: result[0],
-      data: result[1]
+      records: result[1]
     }
-    return res.json(dataTableModel)
+    return RETURNSUCCESS(res, dataTableModel)
   })
+})
+
+/**
+ * 使用promise编写分页查询接口
+ */
+router.get('/queryByPageUsePromise', (req, res) => {
+  let reqBody = req.body
+  let query = {}
+  let opt = {}
+  if (reqBody.name) {
+    let nameKeyWord = {$regex: new RegExp(reqBody.name.trim())}
+    query.$or = [{name: nameKeyWord, shortName: nameKeyWord}]
+  }
+  opt.limit = reqBody.pageSize || 10
+  opt.skip = reqBody.pageIndex * 10 || 0
+
+  let CountPromise = new Promise(function (resolve, reject) {
+    company.countCompany(query, (error, returnData) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(returnData)
+      }
+    })
+  })
+
+  CountPromise
+    .then(function (count) {
+      company.queryCompanyByPage(query, opt, (error, returnData) => {
+        if (error) {
+          return RETURNFAIL(res, error)
+        }
+        let dataTableModel = {
+          recordsFiltered: count,
+          recordsTotal: count,
+          records: returnData
+        }
+        return RETURNSUCCESS(res, dataTableModel)
+      })
+    })
+    .catch(function (error) {
+      return RETURNFAIL(res, error)
+    })
 })
 
 /**

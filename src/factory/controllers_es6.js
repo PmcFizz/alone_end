@@ -4,7 +4,6 @@
 
 let router = require('express').Router()
 let waitreplace = require(PROXY).waitreplace
-let async = require('async')
 
 /**
  * add one waitreplace api
@@ -21,46 +20,46 @@ router.post('/createOne', (req, res) => {
 })
 
 /**
- *  query waitreplace data by page
+ *  query waitreplace data by page use promise
  */
 router.post('/queryByPage', (req, res) => {
   let reqBody = req.body
   let query = {}
   let opt = {}
   if (reqBody.name) {
-    query.name = reqBody.name
+    let nameKeyWord = {$regex: new RegExp(reqBody.name.trim())}
+    query.$or = [{name: nameKeyWord}]
   }
-  opt.limit = reqBody.length
-  opt.skip = reqBody.start
+  opt.limit = reqBody.pageSize || 10
+  opt.skip = reqBody.pageIndex * 10 || 0
 
-  async.parallel([
-    (cb) => {
-      waitreplace.countWaitreplace(query, (error, returnData) => {
-        if (error) {
-          cb(error)
-        } else {
-          cb(null, returnData)
-        }
-      })
-    },
-    (cb) => {
+  let CountPromise = new Promise(function (resolve, reject) {
+    waitreplace.countWaitreplace(query, (error, returnData) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(returnData)
+      }
+    })
+  })
+
+  CountPromise
+    .then(function (count) {
       waitreplace.queryWaitreplaceByPage(query, opt, (error, returnData) => {
         if (error) {
-          cb(error)
-        } else {
-          cb(null, returnData)
+          return RETURNFAIL(res, error)
         }
+        let dataTableModel = {
+          recordsFiltered: count,
+          recordsTotal: count,
+          records: returnData
+        }
+        return RETURNSUCCESS(res, dataTableModel)
       })
-    }
-
-  ], (err, result) => {
-    let dataTableModel = {
-      recordsFiltered: result[0],
-      recordsTotal: result[0],
-      data: result[1]
-    }
-    return res.json(dataTableModel)
-  })
+    })
+    .catch(function (error) {
+      return RETURNFAIL(res, error)
+    })
 })
 
 /**

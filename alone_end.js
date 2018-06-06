@@ -18,6 +18,8 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(session({
   secret: 'shiJiang',
+  resave: true,
+  saveUninitialized: true,
   cookie: {},
   store: new MongoStore({
     url: dbConfig.dburl
