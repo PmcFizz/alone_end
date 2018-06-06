@@ -3,7 +3,7 @@ let user = require(PROXY).user
 let {isPhoneNumber, isEmail, isValidUserpwd} = require('../tools/validate')
 let sendMail = require('../tools/mail')
 let registerMailContent = require('../config/mailConfig').registerMailContent
-
+let async = require('async')
 // 注册用户
 router.post('/createOne', function (req, res) {
   let params = req.body
@@ -131,6 +131,61 @@ router.post('/queryMyInfo', (req, res) => {
     } else {
       return RETURNSUCCESS(res, data)
     }
+  })
+})
+
+// 后台管理端登陆接口
+router.post('/admin-userLogin', function (req, res) {
+  let reqData = req.body
+  if (reqData.account === 'pmc' && reqData.password === 'isbetter') {
+    return RETURNSUCCESS(res, {name: 1})
+  } else {
+    return RETURNFAIL(res, {msg: '账户或密码错误'})
+  }
+})
+
+// 分页查询用户
+router.post('/queryByPage', function (req, res) {
+  let reqBody = req.body
+  let query = {}
+  let opt = {}
+  if (reqBody.name) {
+    let nameKeyWord = {$regex: new RegExp(reqBody.name.trim())}
+    query.$or = [{name: nameKeyWord, shortName: nameKeyWord}]
+  }
+  opt.limit = reqBody.pageSize || 10
+  opt.skip = reqBody.pageIndex * 10 || 0
+
+  async.parallel([
+    (cb) => {
+      user.countUser(query, (error, returnData) => {
+        if (error) {
+          cb(error)
+        } else {
+          cb(null, returnData)
+        }
+      })
+    },
+    (cb) => {
+      user.queryUserByPage(query, opt, (error, returnData) => {
+        if (error) {
+          cb(error)
+        } else {
+          cb(null, returnData)
+        }
+      })
+    }
+
+  ], (err, result) => {
+    if (err) {
+      return RETURNFAIL(res, err)
+    }
+    let dataTableModel = {
+      recordsFiltered: result[0],
+      recordsTotal: result[0],
+      records: result[1]
+    }
+    return RETURNSUCCESS(res, dataTableModel)
   })
 })
 
