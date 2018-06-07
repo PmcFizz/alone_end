@@ -49,13 +49,13 @@ router.post('/login', function (req, res) {
       return RETURNFAIL(res, err)
     } else {
       if (data.length === 0) {
-        return RETURNSUCCESS(res, {msg: '没有查到该用户'})
+        return RETURNFAIL(res, {msg: '没有查到该用户'})
       } else {
         if (params.password === data[0].password) {
           req.session.userId = data[0]._id
           return RETURNSUCCESS(res, {msg: '登录成功'})
         } else {
-          return RETURNSUCCESS(res, {msg: '密码错误'})
+          return RETURNFAIL(res, {msg: '密码错误'})
         }
       }
     }
