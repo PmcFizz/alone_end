@@ -13,6 +13,7 @@ const companySchema = new schema({
   shortName: '', // 公司短名
   companyLink: '', // 公司官网
   logo: '', // 公司logo
+  creditLevel: {type: Number, default: 1}, // 信用等级
   createUserId: {type: schema.Types.ObjectId, ref: 'user'}, // 创建人
   createDate: {type: Date, default: Date.now()}, // 创建时间
   status: {type: Number, default: 1}, // 状态
@@ -20,6 +21,7 @@ const companySchema = new schema({
   type: String, // 公司类型
   companyAddress: String, // 公司地址
   tags: {type: Array}, // 标签
+  links: {type: Array}, // 相关参考链接
   companyIntroText: String, // 公司介绍
   isImport: {type: Boolean, default: false}, // 是否是导入的
   lastModifiedDate: {type: Date, default: Date.now()} // 最后更新时间
