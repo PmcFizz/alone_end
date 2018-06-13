@@ -124,6 +124,9 @@ router.post('/commonQueryUser', function (req, res) {
 router.post('/queryMyInfo', (req, res) => {
   let params = req.body
   let userId = req.session.userId
+  if(!userId){
+    return res.json({code: 10004, msg: '登录过期或未登录'})
+  }
   params._id = userId
   user.queryUsers(params, {password: 0}, (err, data) => {
     if (err) {
