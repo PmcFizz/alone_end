@@ -13,8 +13,8 @@ var app = express()
 require('./global')
 
 //  跨域请求
-app.all('*', function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*')
+app.all('http://mczaiyun.top', function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'http://mczaiyun.top')
   res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS')
   res.header('Access-Control-Allow-Headers', 'X-Requested-With')
   res.header('Access-Control-Allow-Credentials', true)
