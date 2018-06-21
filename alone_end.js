@@ -11,6 +11,16 @@ var MongoStore = require('connect-mongo')(session)
 let dbConfig = require('./src/config/dbConfig')
 var app = express()
 require('./global')
+
+//  跨域请求
+app.all('*', function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With')
+  res.header('Access-Control-Allow-Headers', 'Content-Type')
+  res.header('Content-Type', 'application/json;charset=utf-8')
+  next()
+})
 app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
@@ -45,13 +55,6 @@ app.use(function (err, req, res) {
   res.json({code: err.status})
 })
 
-//  跨域请求
-app.use(function (req, res, next) {
-  res.set('Access-Control-Allow-Origin', '*')
-  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-  res.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type')
-  next()
-})
 
 var port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
