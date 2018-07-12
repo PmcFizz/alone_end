@@ -180,12 +180,16 @@ router.post('/commonQuery', (req, res) => {
  */
 router.post('/queryCompanyByKeyWord', (req, res) => {
   let reqBody = req.body
-  let option = {}
+  let option = {
+    limit: 10,
+    skip: 1
+  }
   // TODO 根据name进行模糊匹配name和shotName字段
-  option.limit = reqBody.pageSize || 10
-  option.skip = reqBody.pageIndex * 10 || 1
-
-  company.queryCompanys(reqBody, option, (error, resData) => {
+  let name = reqBody.name
+  let patt=new RegExp(`${name}`);
+  reqBody.name = { $regex: patt }
+  console.log(reqBody)
+  company.queryCompanyByPage(reqBody, option, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
     } else {

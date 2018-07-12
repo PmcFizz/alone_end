@@ -129,10 +129,35 @@ router.post('/queryMyInfo', (req, res) => {
   }
   params._id = userId
   user.queryUsers(params, {password: 0}, (err, data) => {
+    let result = data[0]
     if (err) {
       return RETURNFAIL(res, err)
     } else {
-      return RETURNSUCCESS(res, data)
+      return RETURNSUCCESS(res, result)
+    }
+  })
+})
+
+// 更新用户信息
+router.post('/updateOneUser', (req, res) => {
+  let params = req.body
+  let phoneNo = params.phoneNo
+  let email = params.email
+  let userId = req.session.userId
+  if(!userId){
+    return res.json({code: 10004, msg: '登录过期或未登录'})
+  }
+  if (!isPhoneNumber(phoneNo)) {
+    return RETURNFAIL(res, {msg: '手机号必须是13位数字'})
+  }
+  if (email && !isEmail(email)) {
+    return RETURNFAIL(res, {msg: '邮箱格式不正确'})
+  }
+  user.updateOneUser({_id:userId}, params, (err, data) => {
+    if (err) {
+      return RETURNFAIL(res, err)
+    } else {
+      return RETURNSUCCESS(res, {msg:'修改成功'})
     }
   })
 })
