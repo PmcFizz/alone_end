@@ -29,7 +29,7 @@ router.post('/queryByPage', (req, res) => {
   let opt = {}
   if (reqBody.name) {
     let nameKeyWord = {$regex: new RegExp(reqBody.name.trim())}
-    query.$or = [{name: nameKeyWord, shortName: nameKeyWord}]
+    query.$or = [{name: nameKeyWord}, {shortName: nameKeyWord}]
   }
   opt.limit = reqBody.pageSize || 10
   opt.skip = reqBody.pageIndex * 10 || 0
@@ -76,7 +76,7 @@ router.get('/queryByPageUsePromise', (req, res) => {
   let opt = {}
   if (reqBody.name) {
     let nameKeyWord = {$regex: new RegExp(reqBody.name.trim())}
-    query.$or = [{name: nameKeyWord, shortName: nameKeyWord}]
+    query.$or = [{name: nameKeyWord}, {shortName: nameKeyWord}]
   }
   opt.limit = reqBody.pageSize || 10
   opt.skip = reqBody.pageIndex * 10 || 0
@@ -167,29 +167,6 @@ router.post('/commonQuery', (req, res) => {
   let reqBody = req.body
   let option = {}
   company.queryCompanys(reqBody, option, (error, resData) => {
-    if (error) {
-      return RETURNFAIL(res, error)
-    } else {
-      return RETURNSUCCESS(res, resData)
-    }
-  })
-})
-
-/**
- * 根据关键字查询公司名
- */
-router.post('/queryCompanyByKeyWord', (req, res) => {
-  let reqBody = req.body
-  let option = {
-    limit: 10,
-    skip: 1
-  }
-  // TODO 根据name进行模糊匹配name和shotName字段
-  let name = reqBody.name
-  let patt=new RegExp(`${name}`);
-  reqBody.name = { $regex: patt }
-  console.log(reqBody)
-  company.queryCompanyByPage(reqBody, option, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
     } else {

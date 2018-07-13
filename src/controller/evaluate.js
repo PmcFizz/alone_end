@@ -14,6 +14,9 @@ router.post('/createOne', (req, res) => {
   let reqBody = req.body
   let userId = req.session.userId
   reqBody.createUserId = userId
+  if(!reqBody.companyId){
+    return RETURNFAIL(res, {msg:'缺少公司id'})
+  }
   evaluate.addOneEvaluate(reqBody, (error, resData) => {
     if (error) {
       return RETURNFAIL(res, error)
