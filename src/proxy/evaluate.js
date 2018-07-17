@@ -30,6 +30,7 @@ exports.addManyEvaluates = (newEvaluates, cb) => {
 exports.queryEvaluates = (query, opt, cb) => {
   Evaluate
     .find(query, opt)
+    .sort({createDate:-1})
     .exec(cb)
 }
 
@@ -110,4 +111,12 @@ exports.delOneEvaluate = (query, cb) => {
  */
 exports.delManyEvaluates = (query, cb) => {
   Evaluate.deleteMany(query, cb)
+}
+
+// 获取评论作者
+exports.queryEvaluateUser = (query, cb) => {
+  Evaluate
+    .findById(query)
+    .populate('createUserId')
+    .exec(cb)
 }

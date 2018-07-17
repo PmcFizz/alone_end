@@ -22,6 +22,7 @@ let userSchema = new Schema({
   domicileDetailAddress: String, // 居住详细地址
   liveAddress: String, // 居住地址
   birthday: {type: Date}, // 生日
+  evaluates: [{type: Schema.Types.ObjectId, ref: 'Evaluate'}], // 评论
   createDate: {type: Date, default: Date.now()}, // 创建时间
   status: {type: Number, default: 1}, // 状态 0:未激活;1:正常使用中;2:锁定
   lastModifyDate: {type: Date, default: Date.now()} // 最后修改时间

@@ -11,7 +11,7 @@ router.post('/createOne', function (req, res) {
   let email = params.email
   let password = params.password
   if (!isPhoneNumber(phoneNo)) {
-    return RETURNFAIL(res, {msg: '手机号必须是13位数字'})
+    return RETURNFAIL(res, {msg: '手机号必须是11位数字'})
   }
   if (email && !isEmail(email)) {
     return RETURNFAIL(res, {msg: '邮箱格式不正确'})
@@ -30,6 +30,7 @@ router.post('/createOne', function (req, res) {
         if (err) {
           return RETURNFAIL(res, err)
         } else {
+          req.session.userId = data._id
           return RETURNSUCCESS(res, {msg: '注册成功'})
         }
       })

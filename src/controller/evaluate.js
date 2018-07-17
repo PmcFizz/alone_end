@@ -13,6 +13,9 @@ let async = require('async')
 router.post('/createOne', (req, res) => {
   let reqBody = req.body
   let userId = req.session.userId
+  if(!userId){
+    return res.json({code: 10004, msg: '登录过期或未登录'})
+  }
   reqBody.createUserId = userId
   if(!reqBody.companyId){
     return RETURNFAIL(res, {msg:'缺少公司id'})
@@ -137,6 +140,9 @@ router.post('/updateOne', (req, res) => {
 router.post('/queryMyEvaluate', (req, res) => {
   let reqBody = req.body
   let userId = req.session.userId
+  if(!userId){
+    return res.json({code: 10004, msg: '登录过期或未登录'})
+  }
   reqBody.createUserId = userId
   let option = {}
   evaluate.queryEvaluates(reqBody, option, (error, resData) => {
@@ -144,6 +150,51 @@ router.post('/queryMyEvaluate', (req, res) => {
       return RETURNFAIL(res, error)
     } else {
       return RETURNSUCCESS(res, resData)
+    }
+  })
+})
+
+/**
+ * 查询公司的评价
+ */
+router.post('/queryCompanyEvaluate', (req, res) => {
+  let reqBody = req.body
+  let query = {}
+  let opt = {}
+  query.companyId = reqBody.id ? reqBody.id : reqBody._id
+  async.waterfall([
+    (cb) => {
+      evaluate.queryEvaluates(query, opt, (error, returnData) => {
+        if (error) {
+          cb(error)
+        } else {
+          cb(null, returnData)
+        }
+      })
+    },
+    (arg, cb) => {
+      let count = 0
+      let returnData = []
+      if(arg.length == 0){cb(null,arg)}
+      for(let i in arg){
+        evaluate.queryEvaluateUser(arg[i]._id, (error, evaluate) => {
+          if (error) {
+            cb(error)
+          } else {
+            let cloned = JSON.parse(JSON.stringify(arg[i]))
+            cloned['nickName'] = evaluate.createUserId.nickName
+            cloned['headPicture'] = evaluate.createUserId.headPicture
+            returnData.push(cloned)
+            ++count == arg.length ? cb(null,returnData) : ''
+          }
+        })
+      }
+    }
+  ], (error, result) => {
+    if (error) {
+      return RETURNFAIL(res, error)
+    } else {
+      return RETURNSUCCESS(res, result)
     }
   })
 })
