@@ -20,21 +20,10 @@ router.post('/uploadImgs', upload.array('file', 20), function (req, res, next) {
   for (var i in req.files) {
     arr.push(global.SERVICEADDRESS + '' + req.files[i].filename)
   }
-  if (req.body.storeId) {
-    PictureStore.updateOnePictureStore({_id: req.body.storeId}, {$addToSet: {pictureUrlArr: {$each: arr}}}, (err, data) => {
-      res.json({
-        code: 200,
-        data: arr
-      })
-    })
-  } else {
-    PictureStore.updateOnePictureStore({isCommon: true}, {$addToSet: {pictureUrlArr: {$each: arr}}}, (err, data) => {
-      res.json({
-        code: 200,
-        data: arr
-      })
-    })
-  }
+  res.json({
+    code: 200,
+    data: arr
+  })
 })
 
 // 获取项目信息

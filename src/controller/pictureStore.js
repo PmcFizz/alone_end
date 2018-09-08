@@ -80,7 +80,7 @@ router.post('/commonQuery', (req, res) => {
   reqBody = req.body
   let option = {}
   pictureStore.queryPictureStores(reqBody, option, (error, returnData) => {
-    return RETURNSUCCESS(error, returnData, res)
+    return RETURNSUCCESS(res, returnData)
   })
 })
 
@@ -94,6 +94,40 @@ router.post('/updateOne', (req, res) => {
   delete reqBody.id
   pictureStore.updateOnePictureStore({_id: id}, {$set: reqBody}, (error, returnData) => {
     return RETURNSUCCESS(error, returnData, res)
+  })
+})
+
+// 向仓库中添加图片
+router.post('/pushImgToStore', (req, res) => {
+  let pictureUrlArr = req.body.pictureUrlArr || []
+  if (req.body.storeId) {
+    pictureStore.updateOnePictureStore({_id: req.body.storeId}, {$addToSet: {pictureUrlArr: {$each: pictureUrlArr}}}, (err, data) => {
+      if (!err) {
+        return RETURNSUCCESS(res, data)
+      } else {
+        return RETURNFAIL(res, err)
+      }
+    })
+  } else {
+    pictureStore.updateOnePictureStore({isCommon: true}, {$addToSet: {pictureUrlArr: {$each: pictureUrlArr}}}, (err, data) => {
+      if (!err) {
+        return RETURNSUCCESS(res, data)
+      } else {
+        return RETURNFAIL(res, err)
+      }
+    })
+  }
+})
+
+// 查询公共图片仓库的数据
+router.get('/getStoreImg', (req, res) => {
+  let query = req.body
+  pictureStore.queryPictureStores(query, {}, (err, data) => {
+    if (!err) {
+      return RETURNSUCCESS(res, data[0])
+    } else {
+      return RETURNFAIL(res, err)
+    }
   })
 })
 

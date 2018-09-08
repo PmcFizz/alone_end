@@ -5,7 +5,7 @@ global.BASEDIR = __dirname
 global.CONTROLLERS = global.BASEDIR + '/src/controller'
 global.MODELS = global.BASEDIR + '/src/model'
 global.PROXY = global.BASEDIR + '/src/proxy'
-global.SERVICEADDRESS = 'http://115.159.52.223:3000/upload/'
+global.SERVICEADDRESS = 'http://localhost:3000/upload/'
 
 // TODO 制定返回的数据格式
 
