@@ -9,4 +9,5 @@ module.exports = function (app) {
   app.use('/company', require(CONTROLLERS + '/company'))
   app.use('/occupationalHistory', require(CONTROLLERS + '/occupationalHistory'))
   app.use('/evaluate', require(CONTROLLERS + '/evaluate'))
+  app.use('/pictureStore', require(CONTROLLERS + '/pictureStore'))
 }
