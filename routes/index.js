@@ -10,4 +10,5 @@ module.exports = function (app) {
   app.use('/occupationalHistory', require(CONTROLLERS + '/occupationalHistory'))
   app.use('/evaluate', require(CONTROLLERS + '/evaluate'))
   app.use('/pictureStore', require(CONTROLLERS + '/pictureStore'))
+  app.use('/design', require(CONTROLLERS + '/design'))
 }
