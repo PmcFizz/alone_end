@@ -35,10 +35,10 @@ validate.add('nickName', {
 })
 
 // 表字段验证规则
-validate.add('phoneNo', {
-  required: true,
-  msg: '缺少手机号'
-})
+// validate.add('phoneNo', {
+//   required: true,
+//   msg: '缺少手机号'
+// })
 
 // 表字段验证规则
 validate.add('password', {

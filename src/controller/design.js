@@ -38,7 +38,6 @@ router.get('/queryByPageUsePromise', (req, res) => {
       if (error) {
         reject(error)
       } else {
-        console.log(returnData)
         resolve(returnData)
       }
     })
@@ -50,7 +49,6 @@ router.get('/queryByPageUsePromise', (req, res) => {
         if (error) {
           return RETURNFAIL(res, error)
         }
-        console.log(returnData)
         let dataTableModel = {
           recordsFiltered: count,
           recordsTotal: count,

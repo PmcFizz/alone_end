@@ -218,4 +218,29 @@ router.post('/queryByPage', function (req, res) {
   })
 })
 
+// 登录注册用户
+router.post('/registerAndLogin', (req, res) => {
+  let reqBody = req.body
+  user.queryUsers({nickName: reqBody.nickName}, (err, queryData) => {
+    if (err) {
+      return RETURNFAIL(res, err)
+    } else {
+      if (queryData && queryData.length > 0) {
+        // 直接登录
+        req.session.userId = queryData[0]._id
+        return RETURNSUCCESS(res, {msg: '登录成功'})
+      } else {
+        user.addOneUser(reqBody, (createErr, createData) => {
+          if (createErr) {
+            return RETURNFAIL(res, createErr)
+          } else {
+            req.session.userId = createData._id
+            return RETURNSUCCESS(res, createData)
+          }
+        })
+      }
+    }
+  })
+})
+
 module.exports = router
