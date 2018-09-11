@@ -10,6 +10,7 @@ let design = require(PROXY).design
  */
 router.post('/createOne', (req, res) => {
   let reqBody = req.body
+  reqBody.createUserId = req.session.userId
   design.addOneDesign(reqBody, (error, returnData) => {
     if (error) {
       return RETURNFAIL(res, returnData)
@@ -101,6 +102,22 @@ router.post('/updateOne', (req, res) => {
   delete reqBody._id
   delete reqBody.id
   design.updateOneDesign({_id: id}, {$set: reqBody}, (error, returnData) => {
+    if (error) {
+      return RETURNFAIL(res, error)
+    } else {
+      return RETURNSUCCESS(res, returnData)
+    }
+  })
+})
+
+/**
+ * query my design data
+ */
+router.post('/queryMy', (req, res) => {
+  if (!req.session.userId) {
+    return RETURNFAIL(res, {msg: '未登录'})
+  }
+  design.queryDesigns({createUserId: req.session.userId}, {}, (error, returnData) => {
     if (error) {
       return RETURNFAIL(res, error)
     } else {

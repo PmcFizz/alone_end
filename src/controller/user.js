@@ -228,14 +228,14 @@ router.post('/registerAndLogin', (req, res) => {
       if (queryData && queryData.length > 0) {
         // 直接登录
         req.session.userId = queryData[0]._id
-        return RETURNSUCCESS(res, {msg: '登录成功'})
+        return RETURNSUCCESS(res, {userId: queryData[0]._id})
       } else {
         user.addOneUser(reqBody, (createErr, createData) => {
           if (createErr) {
             return RETURNFAIL(res, createErr)
           } else {
             req.session.userId = createData._id
-            return RETURNSUCCESS(res, createData)
+            return RETURNSUCCESS(res, {userId: createData._id})
           }
         })
       }
