@@ -1,7 +1,9 @@
 var router = require('express').Router()
 var projectInfo = require('../projectInfo.json')
 var multer = require('multer')
-let PictureStore = require(PROXY).pictureStore
+var jwt = require('jsonwebtoken')
+var formidable = require('formidable')
+var node_xlsx = require('node-xlsx')
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -33,7 +35,15 @@ router.get('/getPorjectInfo', function (req, res) {
 
 // 获取项目信息
 router.post('/getPorjectInfo', function (req, res) {
+  var token = jwt.sign({foo: 'bar'}, 'shhhhh')
+  projectInfo.token = token
   RETURNSUCCESS(res, projectInfo)
+})
+
+// 解析上传的excel
+router.post('analyExcel', function (req, res) {
+  let returnObj = {}
+  res.json(returnObj)
 })
 
 module.exports = router
