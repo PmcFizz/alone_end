@@ -1,4 +1,5 @@
 require('./connectDB')
+const verifyToken = require('../src/middleware/verifyToken')
 
 module.exports = function (app) {
   // baseAPI
@@ -9,6 +10,6 @@ module.exports = function (app) {
   app.use('/company', require(CONTROLLERS + '/company'))
   app.use('/occupationalHistory', require(CONTROLLERS + '/occupationalHistory'))
   app.use('/evaluate', require(CONTROLLERS + '/evaluate'))
-  app.use('/pictureStore', require(CONTROLLERS + '/pictureStore'))
+  app.use('/pictureStore', verifyToken, require(CONTROLLERS + '/pictureStore'))
   app.use('/design', require(CONTROLLERS + '/design'))
 }

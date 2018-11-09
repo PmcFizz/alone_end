@@ -33,11 +33,21 @@ router.get('/getPorjectInfo', function (req, res) {
   RETURNSUCCESS(res, projectInfo)
 })
 
-// 获取项目信息
-router.post('/getPorjectInfo', function (req, res) {
-  var token = jwt.sign({foo: 'bar'}, 'shhhhh')
-  projectInfo.token = token
-  RETURNSUCCESS(res, projectInfo)
+// 生成Token
+router.post('/signToken', function (req, res) {
+  let key = 'Fizz'
+  var token = jwt.sign({name: 'Fizz', userId: '123456'}, key, {expiresIn: 60}) // 一分钟后失效
+  RETURNSUCCESS(res, {token})
+})
+
+// 验证Token
+router.post('/verifyToken', function (req, res) {
+  var token = req.headers.accesstoken
+  let key = 'Fizz'
+  jwt.verify(token, key, (err, decoded) => {
+    if (err) console.log(err)
+    RETURNSUCCESS(res, decoded)
+  })
 })
 
 // 解析上传的excel

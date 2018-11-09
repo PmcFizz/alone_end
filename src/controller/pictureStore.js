@@ -7,6 +7,16 @@ let pictureStore = require(PROXY).pictureStore
 let async = require('async')
 let reqBody
 
+// 验证Token
+// router.post('/verifyToken', function (req, res) {
+//   var token = req.headers.accesstoken
+//   let key = 'Fizz'
+//   jwt.verify(token, key, (err, decoded) => {
+//     if (err) console.log(err)
+//     RETURNSUCCESS(res, decoded)
+//   })
+// })
+
 /**
  * add one pictureStore api
  */

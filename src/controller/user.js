@@ -4,6 +4,8 @@ let {isPhoneNumber, isEmail, isValidUserpwd} = require('../tools/validate')
 let sendMail = require('../tools/mail')
 let registerMailContent = require('../config/mailConfig').registerMailContent
 let async = require('async')
+const jwt = require('jsonwebtoken')
+const tokenKey = require('../config/tokenKey')
 // 注册用户
 router.post('/createOne', function (req, res) {
   let params = req.body
@@ -228,14 +230,16 @@ router.post('/registerAndLogin', (req, res) => {
       if (queryData && queryData.length > 0) {
         // 直接登录
         req.session.userId = queryData[0]._id
-        return RETURNSUCCESS(res, {userId: queryData[0]._id})
+        var token = jwt.sign({name: 'Fizz', userId: queryData[0]._id}, tokenKey.publicKey, {expiresIn: 60 * 60}) // 1h后失效
+        return RETURNSUCCESS(res, {accessToken: token})
       } else {
         user.addOneUser(reqBody, (createErr, createData) => {
           if (createErr) {
             return RETURNFAIL(res, createErr)
           } else {
             req.session.userId = createData._id
-            return RETURNSUCCESS(res, {userId: createData._id})
+            var token = jwt.sign({name: 'Fizz', userId: createData._id}, tokenKey.publicKey, {expiresIn: 60 * 60}) // 1h后失效
+            return RETURNSUCCESS(res, {accessToken: token})
           }
         })
       }
