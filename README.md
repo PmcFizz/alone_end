@@ -18,3 +18,6 @@
 7:使用promise 操作异步查询,分页查询
 
 公司数据链接 https://github.com/maguowei/Internet-companies-of-China
+
+效果查看  http://115.159.52.223/
+强行提交一次 变绿吧
