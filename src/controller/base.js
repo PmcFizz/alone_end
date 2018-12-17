@@ -2,8 +2,8 @@ var router = require('express').Router()
 var projectInfo = require('../projectInfo.json')
 var multer = require('multer')
 var jwt = require('jsonwebtoken')
-var formidable = require('formidable')
-var node_xlsx = require('node-xlsx')
+var fs = require('fs')
+var xlsx = require('node-xlsx')
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -50,8 +50,40 @@ router.post('/verifyToken', function (req, res) {
   })
 })
 
-// 解析上传的excel
-router.post('analyExcel', function (req, res) {
+// 导入excel
+router.get('/uploadExcel', function (req, res) {
+  let data = [
+    {
+      name: '第一个sheet',
+      data: [['字段1', '字段2', '字段3'], ['1', 'Michael', '99'], ['2', 'Tom', '98']]
+    },
+    {
+      name: '第二个sheet',
+      data: [['A1', 'B1'], ['A2', 'B2']]
+    }
+  ]
+
+  // 将格式化的数据写如excel文件
+  let buffer = xlsx.build(data)
+  fs.writeFile('./resut.xls', buffer, function (err) {
+    if (err) {
+      console.log(err, '保存excel出错')
+    } else {
+      console.log('写入excel成功!!!')
+      // 读取excel
+      var obj = xlsx.parse('./' + 'resut.xls')
+      console.log('读取excel成功' + JSON.stringify(obj))
+
+      // 下载excel表
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats')
+      res.setHeader('Content-Disposition', 'attachment; filename=' + 'export.xlsx')
+      res.end(buffer, 'binary')
+    }
+  })
+})
+
+// 导出excel
+router.post('/exportExcel', function (req, res) {
   let returnObj = {}
   res.json(returnObj)
 })
