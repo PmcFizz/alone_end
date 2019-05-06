@@ -40,3 +40,12 @@ exports.delOnePoetry = function (query, cb) {
 exports.updateOnePoetry = function (query, updateData, cb) {
   Poetry.updateOne(query, updateData, cb)
 }
+
+// 查询一条最大的forDate
+exports.findMaxForDate = function (query, cb) {
+  Poetry
+    .find(query)
+    .sort('-forDate')
+    .limit(1)
+    .exec(cb)
+}

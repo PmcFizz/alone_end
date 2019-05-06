@@ -12,6 +12,7 @@ let poetrySchema = new Schema({
   title: String, // 诗的标题
   content: Array, // 诗的内容
   author: String, // 诗的作者
+  forDate: String, // 该时间展示
   createDate: {type: Date, default: Date.now()}, // 创建时间
   lastModifyDate: {type: Date, default: Date.now()} // 最后修改时间
 })
