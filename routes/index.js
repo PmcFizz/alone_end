@@ -12,4 +12,5 @@ module.exports = function (app) {
   app.use('/evaluate', require(CONTROLLERS + '/evaluate'))
   app.use('/pictureStore', verifyToken, require(CONTROLLERS + '/pictureStore'))
   app.use('/design', require(CONTROLLERS + '/design'))
+  app.use('/poetry', require(CONTROLLERS + '/poetry'))
 }

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Excel导入导出</title>
+    <link href="../lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row" style="margin-bottom: 10px;margin-top: 20px">
+        <form class="form-inline">
+            <div class="form-group">
+                <label>中队</label>
+                <select class="form-control" id="struct"> </select>
+            </div>
+            <button type="button" class="btn btn-default" onclick="searchData()">查询</button>
+        </form>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>id</th>
+            <th>车名</th>
+            <th>类型</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="carTbody">
+        <tr>
+            <th colspan="5" style="text-align: center">暂无数据</th>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="editCarModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">修改车辆信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="gpsimei">GPS IMEI</label>
+                            <input class="form-control" id="gpsimei" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="videoAccount">摄像头账号 </label>
+                            <input class="form-control" id="videoAccount" placeholder="videoAccount">
+                        </div>
+                        <div class="form-group">
+                            <label for="videoPwd">摄像头密码 </label>
+                            <input class="form-control" id="videoPwd" placeholder="videoPwd">
+                        </div>
+
+                        <ul class="list-group" id="videoUL">
+                            <!--<li class="list-group-item">-->
+                            <!--<input class="form-control J_account" placeholder="账号">-->
+                            <!--<input class="form-control J_pwd" placeholder="密码">-->
+                            <!--<input class="form-control J_title" placeholder="摄像头名称">-->
+                            <!--</li>-->
+                        </ul>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="saveCarInfo()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script src="../lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script>
+  var videoItem = {} // 要编辑的视频对象
+  var gpsItem = {} // 要编辑的GPS对象
+  $('#struct').val('')
+  searchData()
+  getStruct()
+
+  function getStruct () {
+    var sendData = {
+      filter: {type: '企业架构', StateType: '有效'},
+      sort: {no: 1}
+    }
+    $.ajax({
+      method: 'POST',
+      url: 'http://113.140.49.38:26808/shendun/ws/common/find/struct',
+      dataType: 'json',
+      async: false,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: JSON.stringify(sendData),
+      type: 'POST',
+      success: function (res) {
+        if (res && res.length > 0) {
+          var vHtml = []
+          res.forEach(function (item) {
+            vHtml.push('<option value="' + item._id + '">' + item.name + '</option>')
+          })
+          $('#struct').html(vHtml.join(''))
+        }
+      }
+    })
+  }
+
+  function searchData () {
+    var struct_id = $('#struct').val()
+    var sendData = {
+      filter: {type: '车辆'}
+    }
+    if (struct_id) {
+      sendData.filter.struct_id = struct_id
+    }
+    $.ajax({
+      method: 'POST',
+      url: 'http://113.140.49.38:26808/shendun/ws/common/find/goods',
+      dataType: 'json',
+      async: false,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: JSON.stringify(sendData),
+      type: 'POST',
+      success: function (res) {
+        if (res && res.length > 0) {
+          var cHtml = []
+          res.forEach(function (item, index) {
+            cHtml.push(' <tr>' +
+              '            <th scope="row">' + index + '</th>' +
+              '            <td>' + item._id + '</td>' +
+              '            <td>' + item.name + '</td>' +
+              '            <td>' + item.model + '</td>' +
+              '            <td><button type="button" data-id="' + item._id + '" data-name="' + item.name + '" class="btn btn-primary J_eidt">修改</button></td>' +
+              '        </tr>'
+            )
+          })
+          $('#carTbody').html(cHtml.join(''))
+
+          $('.J_eidt').click(clickEdit)
+        }
+      }
+    })
+  }
+
+  function clickEdit (even) {
+    videoItem = {} // 要编辑的视频对象
+    gpsItem = {} // 要编辑的GPS对象
+    getCarInfo(even.target.dataset.id)
+    $('#myModalLabel').html('修改' + even.target.dataset.name + '车辆信息')
+    $('#editCarModal').modal('show')
+  }
+
+  function getCarInfo (id) {
+    var sendData = {
+      filter: {install_id: id}
+    }
+    $.ajax({
+      method: 'POST',
+      url: 'http://113.140.49.38:26808/shendun/ws/common/find/device',
+      dataType: 'json',
+      async: false,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: JSON.stringify(sendData),
+      type: 'POST',
+      success: function (res) {
+        if (res && res.length > 0) {
+          var videoArr = res.filter(function (x) {
+            return x.type === 'video'
+          })
+          if (videoArr && videoArr.length > 0) {
+            videoItem = videoArr[0]
+          }
+
+          var gpsArr = res.filter(function (x) {
+            return x.type === 'gps'
+          })
+          if (gpsArr && gpsArr.length > 0) {
+            gpsItem = gpsArr[0]
+          }
+          $('#gpsimei').val(gpsItem.imei)
+          $('#videoAccount').val(videoItem.account)
+          $('#videoPwd').val(videoItem.pwd)
+
+          var vHtml = []
+          if (videoItem.video && videoItem.video.length > 0) {
+            videoItem.video.forEach(function (item) {
+              vHtml.push('<li class="list-group-item J_carItemVideo" style="margin-bottom: 10px;border-bottom: 2px solid darkred">')
+              vHtml.push('<form class="form-inline">')
+              vHtml.push('<div class="form-group"><label>摄像头账号</label><input type="text" class="form-control J_account" value="' + item.acc + '"  placeholder="账号"></div>')
+              vHtml.push('<div class="form-group"><label>摄像头密码</label><input type="text" class="form-control J_pwd" value="' + item.pwd + '" placeholder="密码"></div>')
+              vHtml.push('<div class="form-group"><label>摄像头名称</label><input type="text" class="form-control J_title" value="' + item.name + '" placeholder="名称"></div>')
+              vHtml.push('</li>')
+            })
+          }
+          $('#videoUL').html(vHtml.join(''))
+        }
+      }
+    })
+  }
+
+  function saveCarInfo () {
+    saveGpsInfo()
+  }
+
+  function saveGpsInfo () {
+    var gpsimei = $('#gpsimei').val()
+    var sendData = {
+      filter: {_id: gpsItem._id},
+      update: {'$set': {imei: gpsimei}}
+    }
+    $.ajax({
+      method: 'POST',
+      url: 'http://113.140.49.38:26808/shendun/ws/common/updateOne/device',
+      dataType: 'json',
+      async: false,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: JSON.stringify(sendData),
+      type: 'POST',
+      success: function (res) {
+        saveVideoInfo()
+      }
+    })
+  }
+
+  function saveVideoInfo () {
+    var video = []
+    $.each($('.J_carItemVideo'), function (i, item) {
+      var acc = $(item).find('.J_account').val()
+      var pwd = $(item).find('.J_pwd').val()
+      var name = $(item).find('.J_title').val()
+      video.push({acc: acc, pwd: pwd, name: name})
+    })
+    console.log(video)
+    var account = $('#videoAccount').val()
+    var pwd = $('#videoPwd').val()
+
+    var sendData = {
+      filter: {
+        _id: videoItem._id
+      },
+      update: {
+        '$set': {video: video, account: account, pwd: pwd}
+      }
+    }
+    $.ajax({
+      method: 'POST',
+      url: 'http://113.140.49.38:26808/shendun/ws/common/updateOne/device',
+      dataType: 'json',
+      async: false,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: JSON.stringify(sendData),
+      type: 'POST',
+      success: function (res) {
+        $('#editCarModal').modal('hide')
+        alert('更新成功')
+      }
+    })
+  }
+</script>
+</body>
+</html>
