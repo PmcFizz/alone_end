@@ -4,6 +4,7 @@
 let router = require('express').Router()
 let poetry = require(PROXY).poetry
 let moment = require('moment')
+let async = require('async')
 
 /**
  * 查询一首显示到Tab的诗
@@ -60,6 +61,72 @@ router.post('/createOne', function (req, res) {
       })
     })
   }
+})
+
+/**
+ * 分页查询诗
+ */
+router.get('/getPoetryByPage', function (req, res) {
+  let reqBody = req.body
+  let query = {}
+  let opt = {}
+  opt.limit = reqBody.pageSize || 10
+  opt.skip = reqBody.pageIndex * 10 || 0
+
+  async.parallel([
+    (cb) => {
+      poetry.countPoetry(query, (error, returnData) => {
+        if (error) {
+          cb(error)
+        } else {
+          cb(null, returnData)
+        }
+      })
+    },
+    (cb) => {
+      poetry.queryPoetryByPage(query, opt, (error, returnData) => {
+        if (error) {
+          cb(error)
+        } else {
+          cb(null, returnData)
+        }
+      })
+    }
+  ], (err, result) => {
+    if (err) {
+      return RETURNFAIL(res, err)
+    }
+    let dataTableModel = {
+      recordsFiltered: result[0],
+      recordsTotal: result[0],
+      records: result[1]
+    }
+    return RETURNSUCCESS(res, dataTableModel)
+  })
+})
+
+/**
+ * 根据id查询诗的详情
+ */
+router.get('/getDetailById', function (req, res) {
+  let reqBody = req.body
+  poetry.queryPoetrys({_id: reqBody._id}, function (error, arr) {
+    if (error) {
+      return RETURNFAIL(res, error)
+    }
+    return RETURNSUCCESS(res, {arr})
+  })
+})
+
+// 更新诗
+router.post('/update', function (req, res) {
+  let updateDate = req.body
+  poetry.updateOnePoetry({_id: updateDate._id}, {$set: updateDate}, function (error, arr) {
+    if (error) {
+      return RETURNFAIL(res, error)
+    }
+    return RETURNSUCCESS(res, {arr})
+  })
 })
 
 module.exports = router
