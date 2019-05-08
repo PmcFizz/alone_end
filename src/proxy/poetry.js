@@ -38,7 +38,7 @@ exports.delOnePoetry = function (query, cb) {
 
 // 更新诗
 exports.updateOnePoetry = function (query, updateData, cb) {
-  Poetry.updateOne(query, updateData, cb)
+  Poetry.findOneAndUpdate(query, updateData, cb)
 }
 
 // 查询一条最大的forDate

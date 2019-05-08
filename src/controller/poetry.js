@@ -109,8 +109,8 @@ router.get('/getPoetryByPage', function (req, res) {
  * 根据id查询诗的详情
  */
 router.get('/getDetailById', function (req, res) {
-  let reqBody = req.body
-  poetry.queryPoetrys({_id: reqBody._id}, function (error, arr) {
+  const {_id} = req.query
+  poetry.queryPoetrys({_id}, {}, function (error, arr) {
     if (error) {
       return RETURNFAIL(res, error)
     }
@@ -121,7 +121,9 @@ router.get('/getDetailById', function (req, res) {
 // 更新诗
 router.post('/update', function (req, res) {
   let updateDate = req.body
-  poetry.updateOnePoetry({_id: updateDate._id}, {$set: updateDate}, function (error, arr) {
+  let _id = updateDate._id
+  delete updateDate._id
+  poetry.updateOnePoetry({_id}, {$set: updateDate}, function (error, arr) {
     if (error) {
       return RETURNFAIL(res, error)
     }
